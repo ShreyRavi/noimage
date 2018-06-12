@@ -3,7 +3,7 @@
 
   "name": "NoImage - Remove ALL Images While Surfing",
   "description": "Remove Out All Images While Surfing The Internet & Social Media. By Shreyas Tallamraju.",
-  "version": "1.0.0",
+  "version": "2.0.0",
 
   "permissions": [
     "activeTab",

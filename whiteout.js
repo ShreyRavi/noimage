@@ -1,8 +1,10 @@
-localStorage["Blackout"] = "false";
+//whiteout.js
+//Shreyas Tallamraju
+//NoImage 2 - Using Chrome Storage API
 
 chrome.tabs.onUpdated.addListener(function(id, info, tab){
-
-    var bool = localStorage["Blackout"];
+    chrome.storage.sync.get(['blackout'], function(items) {
+    var bool = items.blackout;
     
 
     if(bool.indexOf("true") > -1){
@@ -33,11 +35,15 @@ code: 'var x = document.images; var i; for (i = 0; i < x.length; i++) { x[i].sty
             },
         tabId: tab.id
         });
-    }
+    }});
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    var bool = localStorage["Blackout"];
+    chrome.storage.sync.get(['blackout'], function(items) {
+    var bool = items.blackout;
+    if(bool == null){
+        bool = "false";
+    }
     if(bool.indexOf("false") > -1){
         chrome.browserAction.setIcon({
             path: {
@@ -49,7 +55,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         chrome.tabs.executeScript({
 code: 'var x = document.images; var i; for (i = 0; i < x.length; i++) { x[i].style.visibility="hidden";}'
 });
-        localStorage["Blackout"] = "true";
+        chrome.storage.sync.set({'blackout': 'true'}, function() {});    
+
     }
     else{
         chrome.browserAction.setIcon({
@@ -62,19 +69,7 @@ code: 'var x = document.images; var i; for (i = 0; i < x.length; i++) { x[i].sty
         chrome.tabs.executeScript({
 code: 'var x = document.images; var i; for (i = 0; i < x.length; i++) { x[i].style.visibility="visible";}'
 });
-        localStorage["Blackout"] = "false";
+        chrome.storage.sync.set({'blackout': 'false'}, function() {});    
     }
-
-
-//autoupdate feature
-/*
-chrome.runtime.onUpdateAvailable.addListener(function(details) {
-  console.log("updating to version " + details.version);
-  chrome.runtime.reload();
 });
-
-chrome.runtime.requestUpdateCheck(function(status) {
-  
-});
-*/
-});
+    });
